@@ -13,5 +13,7 @@ setcookie(session_name(), '', time() - 42000,
 );
 session_destroy();
 
+$token = get_csrf_token();
+
 redirect_to(LOGIN_URL);
 
