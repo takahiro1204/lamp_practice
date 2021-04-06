@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- ホスト: mysql
--- 生成日時: 2021 年 4 月 04 日 09:40
+-- 生成日時: 2021 年 4 月 06 日 15:16
 -- サーバのバージョン： 5.7.33
 -- PHP のバージョン: 7.4.15
 
@@ -30,8 +30,8 @@ SET time_zone = "+00:00";
 CREATE TABLE `details` (
   `order_id` int(11) NOT NULL,
   `item_id` int(11) NOT NULL,
-  `amount` varchar(100) NOT NULL,
-  `create_datetime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `amount` int(11) NOT NULL,
+  `price` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -42,13 +42,19 @@ CREATE TABLE `details` (
 
 CREATE TABLE `history` (
   `order_id` int(11) NOT NULL,
-  `user_name` int(11) NOT NULL,
-  `create_datetime` int(11) NOT NULL
+  `user_id` int(11) NOT NULL,
+  `create_datetime` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- ダンプしたテーブルのインデックス
 --
+
+--
+-- テーブルのインデックス `details`
+--
+ALTER TABLE `details`
+  ADD PRIMARY KEY (`order_id`,`item_id`) USING BTREE;
 
 --
 -- テーブルのインデックス `history`
