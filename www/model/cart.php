@@ -106,11 +106,50 @@ function delete_cart($db, $cart_id)
   return execute_query($db, $sql,[$cart_id]);
 }
 
+$db->beginTransaction();
+
+$order_id = $db->lastinsertId($order_id);
+
 function purchase_carts($db, $carts)
 {
   if (validate_cart_purchase($carts) === false) {
     return false;
   }
+
+
+function history_cart($db,$order_id,$user_id,$create_datetime)
+{
+  $sql = "
+  INSERT INTO
+     carts(
+        order_id,
+        user_id,
+        date,
+      )
+      VALUE(?,?,?)
+    ";
+
+    return execute_query($db,$sql,[$order_id,$user_id,]);
+  
+}
+
+foreach($carts as $cart) {
+function details_cart($db,$order_id,$item_id,$amount,$price)
+{
+  $sql = "
+  INSERT INTO
+     carts(
+        order_id,
+        item_id,
+        amount,
+        price,
+      )
+      VALUE(?,?,?,?)
+    ";
+
+    return execute_query($db,$sql,[$order_id,$item_id,$amount,$price]);
+}
+}
   foreach ($carts as $cart) {
     if (update_item_stock(
       $db,
