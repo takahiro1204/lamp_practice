@@ -106,10 +106,6 @@ function delete_cart($db, $cart_id)
   return execute_query($db, $sql,[$cart_id]);
 }
 
-$db->beginTransaction();
-
-$order_id = $db->lastinsertId($order_id);
-
 function purchase_carts($db, $carts)
 {
   if (validate_cart_purchase($carts) === false) {
@@ -117,39 +113,9 @@ function purchase_carts($db, $carts)
   }
 
 
-function history_cart($db,$order_id,$user_id,$create_datetime)
-{
-  $sql = "
-  INSERT INTO
-     carts(
-        order_id,
-        user_id,
-        date,
-      )
-      VALUE(?,?,?)
-    ";
+$db ->beginTransaction();
 
-    return execute_query($db,$sql,[$order_id,$user_id,]);
-  
-}
-
-foreach($carts as $cart) {
-function details_cart($db,$order_id,$item_id,$amount,$price)
-{
-  $sql = "
-  INSERT INTO
-     carts(
-        order_id,
-        item_id,
-        amount,
-        price,
-      )
-      VALUE(?,?,?,?)
-    ";
-
-    return execute_query($db,$sql,[$order_id,$item_id,$amount,$price]);
-}
-}
+create_purchasehistory($db,$carts);
   foreach ($carts as $cart) {
     if (update_item_stock(
       $db,
@@ -161,6 +127,11 @@ function details_cart($db,$order_id,$item_id,$amount,$price)
   }
 
   delete_user_carts($db, $carts[0]['user_id']);
+  if(has_error()) {
+    $db->rollback();
+  } else {
+    $db->commit();
+  }
 }
 
 function delete_user_carts($db, $user_id)
@@ -205,22 +176,45 @@ function validate_cart_purchase($carts)
   return true;
 }
 
-// トークンの生成
-function get_csrf_token()
+
+function insert_history($db,$user_id)
 {
-  // get_random_string()はユーザー定義関数。
-  $token = get_random_string(30);
-  // set_session()はユーザー定義関数。
-  set_session('csrf_token', $token);
-  return $token;
+  $sql = "
+  INSERT INTO
+     history(
+        user_id,
+        create_datetime
+      )
+      VALUE(?,NOW())
+    ";
+
+    return execute_query($db,$sql,[$user_id,]);
+  
 }
 
-// トークンのチェック
-function is_valid_csrf_token($token)
+function insert_details($db,$order_id,$item_id,$amount,$price) //関数：insert_detalis  引数:($db,$order_id,$item_id,$amount,$price)
 {
-  if ($token === '') {
-    return false;
+  $sql = "
+  INSERT INTO
+     details(
+        order_id,
+        item_id,
+        amount,
+        price,
+      )
+      VALUE(?,?,?,?)
+    ";
+
+    return execute_query($db,$sql,[$order_id,$item_id,$amount,$price]);
+}
+
+function create_purchasehistory($db,$carts) {
+  if(insert_history($db,$carts[0]['user_id']) === false) { //$carts[0]['user_id']は1件目のユーザーIDを取得(1を使いたいが0からカウント開始)
+    set_error('購入履歴データの作成に失敗しました');
+    return false; //処理を中止する
   }
-  // get_session()はユーザー定義関数
-  return $token === get_session('csrf_token');
+  $order_id = $db->lastInsertId();
+  foreach($carts as $cart) {
+    insert_details($db,$order_id,$cart['item_id'],$cart['amount'],$cart['price']);
+  }
 }
