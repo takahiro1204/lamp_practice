@@ -113,7 +113,7 @@ function purchase_carts($db, $carts)
   }
 
 
-$db ->beginTransaction();
+$db ->beginTransaction(); //関連する複数の処理を一つの処理としてまとめる
 
 create_purchasehistory($db,$carts);
   foreach ($carts as $cart) {
@@ -128,11 +128,11 @@ create_purchasehistory($db,$carts);
 
   delete_user_carts($db, $carts[0]['user_id']);
   if(has_error()) {
-    $db->rollback();
+    $db->rollback(); //ひとつでも違ってたらやり直し
   } else {
-    $db->commit();
+    $db->commit(); 
   }
-}
+}  
 
 function delete_user_carts($db, $user_id)
 {
@@ -182,25 +182,25 @@ function insert_history($db,$user_id)
   $sql = "
   INSERT INTO
      history(
-        user_id,
+        user_id
         create_datetime
       )
       VALUE(?,NOW())
     ";
 
-    return execute_query($db,$sql,[$user_id,]);
+    return execute_query($db,$sql,[$user_id]);
   
 }
 
 function insert_details($db,$order_id,$item_id,$amount,$price) //関数：insert_detalis  引数:($db,$order_id,$item_id,$amount,$price)
 {
   $sql = "
-  INSERT INTO
+   INSERT INTO
      details(
-        order_id,
-        item_id,
-        amount,
-        price,
+        order_id
+        item_id
+        amount
+        price
       )
       VALUE(?,?,?,?)
     ";
@@ -209,12 +209,13 @@ function insert_details($db,$order_id,$item_id,$amount,$price) //関数：insert
 }
 
 function create_purchasehistory($db,$carts) {
-  if(insert_history($db,$carts[0]['user_id']) === false) { //$carts[0]['user_id']は1件目のユーザーIDを取得(1を使いたいが0からカウント開始)
+  if(insert_history($db,$carts[0]['user_id']) === false) {  //$carts[0]['user_id']は1件目のユーザーIDを取得(1を使いたいが0からカウント開始)
+    
     set_error('購入履歴データの作成に失敗しました');
     return false; //処理を中止する
   }
   $order_id = $db->lastInsertId();
   foreach($carts as $cart) {
-    insert_details($db,$order_id,$cart['item_id'],$cart['amount'],$cart['price']);
+    insert_details($db,$order_id,$cart['item_id'],$cart['amount'],$cart['price']); //$cartの中のカラムをループ処理する
   }
 }
