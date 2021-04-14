@@ -76,7 +76,7 @@ function insert_cart($db, $user_id, $item_id, $amount = 1)
     VALUES(?,?,?)
   ";
 
-  return execute_query($db, $sql,[$item_id,$user_id,$amount]);
+  return execute_query($db, $sql,[$item_id,$user_id,$amount]); 
 }
 
 function update_cart_amount($db, $cart_id, $amount)
@@ -132,20 +132,21 @@ create_purchasehistory($db,$carts);
   } else {
     $db->commit(); 
   }
-}  
+}
 
 function delete_user_carts($db, $user_id)
 {
   $sql = "
     DELETE FROM
       carts
-    WHERE
-      user_id = ?
+    WHERE           
+      user_id = ?    
   ";
 
-  execute_query($db, $sql,[$user_id]);
+  execute_query($db, $sql,[$user_id]); 
 }
-
+//SQLインジェクション(SQLの実行に利用されるフォームの入力値等を通じて攻撃)
+//対策として143行目の[$user_id]を?に変換、146行目に[$user_id]を追加
 
 function sum_carts($carts)
 {
@@ -182,7 +183,7 @@ function insert_history($db,$user_id)
   $sql = "
   INSERT INTO
      history(
-        user_id
+        user_id,
         create_datetime
       )
       VALUE(?,NOW())
@@ -192,14 +193,16 @@ function insert_history($db,$user_id)
   
 }
 
-function insert_details($db,$order_id,$item_id,$amount,$price) //関数：insert_detalis  引数:($db,$order_id,$item_id,$amount,$price)
+function insert_details($db,$order_id,$item_id,$amount,$price) 
+//関数：insert_detalis  引数:($db,$order_id,$item_id,$amount,$price)
+//引数とはある情報(値)を引数が持っており、それを関数に渡すことで、関数はその情報に応じた処理をする
 {
   $sql = "
    INSERT INTO
      details(
-        order_id
-        item_id
-        amount
+        order_id,
+        item_id,
+        amount,
         price
       )
       VALUE(?,?,?,?)
@@ -214,8 +217,10 @@ function create_purchasehistory($db,$carts) {
     set_error('購入履歴データの作成に失敗しました');
     return false; //処理を中止する
   }
-  $order_id = $db->lastInsertId();
+  $order_id = $db->lastInsertId();//lastInsertId(自動的に割り当てられたIDを取得する)
+                                  //使用条件はテーブルの主キーがAUTO INCREMENT(オートインクリメント)の自動連番であること
   foreach($carts as $cart) {
-    insert_details($db,$order_id,$cart['item_id'],$cart['amount'],$cart['price']); //$cartの中のカラムをループ処理する
+    insert_details($db,$order_id,$cart['item_id'],$cart['amount'],$cart['price']); 
+    //ここでinsert_detailsを呼び出して、$cartの中のカラムをループ処理する。
   }
 }
