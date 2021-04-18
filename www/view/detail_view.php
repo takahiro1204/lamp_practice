@@ -24,19 +24,19 @@
                             </tr>
                         </thead>
                     </table>
-                    <?php foreach ($histories as $history) { ?>}
-                    <tr>
-                        <?php print(h($history['oreder_id'])); ?>
-                        <?php print(h($history['date'])); ?>
-                        <?php print(h($history['total'])); ?>
-                        <td>
-                            <form method="post" action="cart.php">
-                                <input type="submit" value="購入明細表示">
-                                <input type="hidden" name="oreder_id" value="<?php print(h($history['oreder_id'])); ?>">
-                            </form>
-                        </td>
-                    </tr>
-                <?php } ?>
+                    <?php foreach ($histories as $history) { ?>
+                        <tr>
+                            <?php print(h($history['oreder_id'])); ?>
+                            <?php print(h($history['date'])); ?>
+                            <?php print(h($history['total'])); ?>
+                            <td>
+                                <form method="post" action="cart.php">
+                                    <input type="submit" value="購入明細表示">
+                                    <input type="hidden" name="oreder_id" value="<?php print(h($history['oreder_id'])); ?>">
+                                </form>
+                            </td>
+                        </tr>
+                    <?php } ?>
             </table>
             <table>
                 <thead>
