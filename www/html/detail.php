@@ -4,23 +4,23 @@ require_once MODEL_PATH . 'functions.php';
 require_once MODEL_PATH . 'user.php';
 require_once MODEL_PATH . 'item.php';
 require_once MODEL_PATH . 'cart.php';
-require_once MODEL_PATH . 'histrory.php';
+require_once MODEL_PATH . 'hidtory.php';
 
 session_start();
 
 if (is_logined() === false) {
-   redirect_to(LOGIN_URL);
+    redirect_to(LOGIN_URL);
 }
 
 $db = get_db_connect();
-$user = get_login_user($db);
+$user = get_login_user($user);
 
 if (is_admin($user) === true) {
-   $histories = insert_history($db, $user_id);
+    $histories = insert_history($db, $user_id);
 } else {
-   $histories = insert_history($db, $user['user_id']);
+    $history = insert_history($db, $user['user_id']);
 }
 
-$token = get_csrf_token();
+$detail = insert_details($db, $order_id, $item_id, $amount, $price);
 
-include_once VIEW_PATH . 'history_view.php';
+include_once VIEW_PATH . 'detail_view.php';
