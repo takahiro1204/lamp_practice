@@ -20,19 +20,21 @@
             <th>購入日時</th>
             <th>合計金額</th>
             <th>明細ボタン</th>
-            <?php foreach ($histories as $history) { ?>
-              <td>
-                <?php print(h($history['order_id'])); ?>
-                <?php print(h($history['create_datetime'])); ?>
-                <?php print(h($history['total'])); ?>
-              <td>
-                <form method="post" action="cart.php">
-                  <input type="submit" value="購入明細表示">
-                  <input type="hidden" name="order_id" value="<?php print(h($history['order_id'])); ?>">
-                </form>
-              </td>
-              </td>
-            <?php } ?>
+          </tr>
+        </thead>
+        <tdody>
+          <?php foreach ($histories as $history) { ?>
+            <tr>
+              <td><?php print(h($history['order_id'])); ?></td>
+              <td><?php print(h($history['create_datetime'])); ?></td>
+              <td><?php print(h($history['total'])); ?></td>
+              <form method="post" action="cart.php">
+                <td><input type="submit" value="購入明細表示"></td>
+                <input type="hidden" name="order_id" value="<?php print(h($history['order_id'])); ?>">
+              </form>
+            </tr>
+          <?php } ?>
+        </tbody>
       </table>
   </div>
 
