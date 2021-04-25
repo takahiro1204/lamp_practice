@@ -28,7 +28,7 @@
               <td><?php print(h($history['order_id'])); ?></td>
               <td><?php print(h($history['create_datetime'])); ?></td>
               <td><?php print(h($history['total'])); ?></td>
-              <form method="post" action="cart.php">
+              <form method="post" action="detail.php">
                 <td><input type="submit" value="購入明細表示"></td>
                 <input type="hidden" name="order_id" value="<?php print(h($history['order_id'])); ?>">
               </form>

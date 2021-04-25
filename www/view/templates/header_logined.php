@@ -20,6 +20,9 @@
         <li class="nav-item">
           <a class="nav-link" href="<?php print(HISTORY_URL);?>">購入履歴</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<?php print(DETAIL_URL);?>">明細履歴</a>
+        </li>
       </ul>
     </div>
   </nav>

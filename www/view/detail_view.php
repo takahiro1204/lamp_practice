@@ -15,28 +15,25 @@
         <?php if (count($details) > 0) { ?>
             <table class="table table-bordered">
                 <thead class="thead-light">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>注文番号</th>
-                                <th>購入日時</th>
-                                <th>合計金額</th>
-                            </tr>
-                        </thead>
-                    </table>
+                    <tr>
+                        <th>注文番号</th>
+                        <th>購入日時</th>
+                        <th>合計金額</th>
+                    </tr>
+                </thead>
+                <tbody>
                     <?php foreach ($histories as $history) { ?>
                         <tr>
-                            <?php print(h($history['oreder_id'])); ?>
-                            <?php print(h($history['date'])); ?>
-                            <?php print(h($history['total'])); ?>
-                            <td>
-                                <form method="post" action="cart.php">
-                                    <input type="submit" value="購入明細表示">
-                                    <input type="hidden" name="oreder_id" value="<?php print(h($history['oreder_id'])); ?>">
-                                </form>
-                            </td>
+                            <th><?php print(h($history['order_id'])); ?></th>
+                            <th><?php print(h($history['create_datetime'])); ?></th>
+                            <th><?php print(h($history['total'])); ?></th>
+                            <form method="post" action="detail.php">
+                                <td><input type="submit" value="購入明細表示"></td>
+                                <input type="hidden" name="order_id" value="<?php print(h($history['order_id'])); ?>">
+                            </form>
                         </tr>
                     <?php } ?>
+                </tbody>
             </table>
             <table>
                 <thead>
@@ -50,10 +47,10 @@
             </table>
             <?php foreach ($details as $detail) { ?>
                 <tr>
-                    <?php print(h($detail['name'])); ?>
-                    <?php print(h($detail['price'])); ?>
-                    <?php print(h($detail['amount'])); ?>
-                    <?php print(h($detail['total'])); ?>
+                    <th><?php print(h($detail['item_id'])); ?></th>
+                    <th><?php print(h($detail['price'])); ?></th>
+                    <th><?php print(h($detail['amount'])); ?></th>
+                    <th><?php print(h($detail['total'])); ?></th>
                 </tr>
             <?php } ?>
         <?php } ?>
