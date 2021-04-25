@@ -4,7 +4,7 @@ require_once MODEL_PATH . 'functions.php';
 require_once MODEL_PATH . 'user.php';
 require_once MODEL_PATH . 'item.php';
 require_once MODEL_PATH . 'cart.php';
-require_once MODEL_PATH . 'histrory.php';
+require_once MODEL_PATH . 'history.php';
 
 session_start();
 
@@ -16,7 +16,7 @@ $db = get_db_connect();
 $user = get_login_user($db);
 
 if (is_admin($user) === true) {
-   $histories = acquisition_history($db, $user);
+   $histories = acquisition_history($db);
 } else {
    $histories = get_history($db, $user['user_id']);
 }
