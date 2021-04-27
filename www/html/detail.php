@@ -15,15 +15,17 @@ if (is_logined() === false) {
 
 $db = get_db_connect();
 $user = get_login_user($db);
+$order = get_post($order_id);
 
 if (is_admin($user) === true) {
-    $histories = acquisition_history($db);
+    $histories = array_filter(acquisition_history($db,$order_id));
+    $details = array_filter(acquisition_details($db,$order_id));
+
 } else {
-    $history = get_history($db, $user['user_id']);
+    $histories = array_filter(get_history($db, $user_id,$order_id));
+    $details = array_filter(get_details($db,$user_id,$order_id));
 }     
 
 $details = get_details($db,$order_id);
-
-$token = get_csrf_token();
 
 include_once VIEW_PATH . 'detail_view.php';

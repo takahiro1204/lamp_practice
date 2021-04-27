@@ -2,17 +2,18 @@
 <html lang="ja">
 
 <head>
-    <?php include VIEW_PATH . 'template/head.php'; ?>
+    <?php include VIEW_PATH . 'templates/head.php'; ?>
     <title>明細履歴</title>
     <link rel="stylesheet" href="<?php print(STYLESHEET_PATH . 'detail.css'); ?>">
 </head>
+<?php if (count($details) > 0) { ?>
 
-<body>
-    <?php include VIEW_PATH . 'templates/header_logined.php'; ?>
-    <h1>明細履歴</h1>
-    <div class="container">
-        <?php include VIEW_PATH . 'templates/messages.php'; ?>
-        <?php if (count($details) > 0) { ?>
+    <body>
+        <?php include VIEW_PATH . 'templates/header_logined.php'; ?>
+        <h1>明細履歴</h1>
+        <div class="container">
+            <?php include VIEW_PATH . 'templates/messages.php'; ?>
+
             <table class="table table-bordered">
                 <thead class="thead-light">
                     <tr>
@@ -53,7 +54,7 @@
                     <th><?php print(h($detail['total'])); ?></th>
                 </tr>
             <?php } ?>
-        <?php } ?>
-</body>
+        <?php }  ?>
+    </body>
 
 </html>
