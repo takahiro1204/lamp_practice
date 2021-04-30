@@ -15,17 +15,16 @@ if (is_logined() === false) {
 
 $db = get_db_connect();
 $user = get_login_user($db);
-$order = get_post($order_id);
+$order_id = get_post('order_id');
 
 if (is_admin($user) === true) {
-    $histories = array_filter(acquisition_history($db,$order_id));
-    $details = array_filter(acquisition_details($db,$order_id));
+    $history = satelate_history($db,$order_id);
+    $details = acquisition_details($db,$order_id);
 
 } else {
-    $histories = array_filter(get_history($db, $user_id,$order_id));
-    $details = array_filter(get_details($db,$user_id,$order_id));
+    $history = open_history($db, $user['user_id'],$order_id);
+    $details = get_details($db,$user['user_id'],$order_id);
 }     
 
-$details = get_details($db,$order_id);
 
 include_once VIEW_PATH . 'detail_view.php';
