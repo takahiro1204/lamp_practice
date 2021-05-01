@@ -45,6 +45,18 @@ function get_items($db, $is_open = false)
   return fetch_all_query($db, $sql);
 }
 
+function get_rankings($db)
+{
+  $sql = 'SELECT 
+    details.name,price,amount,sum(amount*order_id) as total
+    FROM details
+    INNER JOIN details on details.item_id = items.item_id
+    WHERE amount = ?
+    items ORDER BY amount DESC LIMIT 3L ';  
+
+  return fetch_all_query($db,$sql);
+}
+
 function get_all_items($db)
 {
   return get_items($db);

@@ -16,9 +16,9 @@ $db = get_db_connect();
 $user = get_login_user($db);
 
 if (is_admin($user) === true) {
-   $histories = acquisition_history($db);
+   $histories = acquisition_history($db); //管理者用
 } else {
-   $histories = get_history($db, $user['user_id']);
+   $histories = get_history($db, $user['user_id']); //一般用
 }
 
 $token = get_csrf_token();

@@ -18,7 +18,7 @@ $user = get_login_user($db);
 $order_id = get_post('order_id');
 
 if (is_admin($user) === true) {
-    $history = satelate_history($db,$order_id);
+    $history = obtain_history($db,$order_id); 
     $details = acquisition_details($db,$order_id);
 
 } else {
