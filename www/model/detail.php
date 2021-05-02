@@ -8,12 +8,12 @@ acquisition_details($db, $order_id) //引数　関数が処理する情報
     $sql = "SELECT name,details.price,amount,amount*details.price as total
            from details
            inner join items on details.item_id = items.item_id　
-           WHERE  order_id  = ?"; 
+           WHERE order_id = ?"; 
            //*details.price detailsテーブルとitemsテーブルの両方にpraiceのカラムがあるため、どちらかのテーブルに指定する必要がある。
            //inner join  detailsテーブルとitemsテーブルにあるitem_idを結合します。
            // WHERE 条件を指定します。ここではorder_idがあるかが条件です。
 
-    return fetch_all_query($db, $sql, array($order_id));//配列　fetch_all_query 全部の情報を取得する
+    return fetch_all_query($db, $sql, array($order_id)); //配列　fetch_all_query 全部の情報を取得する
 }
 
 function //get_detailsは一般用の関数
@@ -31,7 +31,7 @@ get_details($db, $user_id, $order_id)
     return fetch_all_query($db, $sql, array($order_id, $user_id));
 }
 
-function //satelate_historyは管理者用の関数
+function //obtain_historyは管理者用の関数
 obtain_history($db, $order_id) 
 {
     $sql = "SELECT history.order_id,create_datetime,sum(amount*price) as total
