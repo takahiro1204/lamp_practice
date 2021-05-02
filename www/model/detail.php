@@ -9,6 +9,7 @@ acquisition_details($db, $order_id) //引数　関数が処理する情報
            from details
            inner join items on details.item_id = items.item_id　
            WHERE  order_id  = ?"; 
+           //*details.price detailsテーブルとitemsテーブルの両方にpraiceのカラムがあるため、どちらかのテーブルに指定する必要がある。
            //inner join  detailsテーブルとitemsテーブルにあるitem_idを結合します。
            // WHERE 条件を指定します。ここではorder_idがあるかが条件です。
 

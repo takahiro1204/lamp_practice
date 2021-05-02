@@ -48,11 +48,12 @@ function get_items($db, $is_open = false)
 function get_rankings($db)
 {
   $sql = 'SELECT 
-    details.name,price,amount,sum(amount*order_id) as total
+    image,details.price,sum(amount)*details.price as total
     FROM details
-    INNER JOIN details on details.item_id = items.item_id
-    WHERE amount = ?
-    items ORDER BY amount DESC LIMIT 3L ';  
+    INNER JOIN items on details.item_id = items.item_id
+    WHERE status = 1
+    GROUP BY item_id
+    ORDER BY sum(amount) DESC LIMIT 3 ';  
 
   return fetch_all_query($db,$sql);
 }
