@@ -20,7 +20,7 @@ function get_item($db, $item_id)
       item_id = ?
   ";
 
-  return fetch_query($db, $sql,[$item_id]);
+  return fetch_query($db, $sql, [$item_id]);
 }
 
 function get_items($db, $is_open = false)
@@ -47,15 +47,17 @@ function get_items($db, $is_open = false)
 
 function get_rankings($db)
 {
-  $sql = 'SELECT 
+  $sql = "SELECT 
     image,name,items.price,sum(amount) as total
-    FROM items
-    INNER JOIN details on items.item_id = details.item_id
+    FROM details
+    INNER JOIN items on details.item_id = items.item_id
     WHERE status = 1
     GROUP BY items.item_id
-    ORDER BY sum(amount) DESC LIMIT 3 ';  
+    ORDER BY sum(amount) DESC LIMIT 3 ";
+    //sum(amount)  数量の合計を取得する
+    // GROUP BY items.item_id ORDER BY sum(amount) DESC LIMIT 3  商品番号(item_id)の数量の合計を降順で表示する
 
-  return fetch_all_query($db,$sql);
+  return fetch_all_query($db, $sql);
 }
 
 function get_all_items($db)
@@ -106,7 +108,7 @@ function insert_item($db, $name, $price, $stock, $filename, $status)
     VALUES(?,?,?,?,?);
   ";
 
-  return execute_query($db, $sql,[$name,$price,$stock,$filename,$status_value]);
+  return execute_query($db, $sql, [$name, $price, $stock, $filename, $status_value]);
 }
 
 function update_item_status($db, $item_id, $status)
@@ -120,8 +122,8 @@ function update_item_status($db, $item_id, $status)
       item_id = ?
     LIMIT 1
   ";
-  
-  return execute_query($db, $sql,[$status,$item_id]);
+
+  return execute_query($db, $sql, [$status, $item_id]);
 }
 
 function update_item_stock($db, $item_id, $stock)
@@ -135,8 +137,8 @@ function update_item_stock($db, $item_id, $stock)
       item_id = ?
     LIMIT 1
   ";
-  
-  return execute_query($db, $sql,[$stock,$item_id]);
+
+  return execute_query($db, $sql, [$stock, $item_id]);
 }
 
 function destroy_item($db, $item_id)
@@ -166,8 +168,8 @@ function delete_item($db, $item_id)
       item_id = ?
     LIMIT 1
   ";
-  
-  return execute_query($db, $sql,[$item_id]);
+
+  return execute_query($db, $sql, [$item_id]);
 }
 
 
@@ -240,4 +242,3 @@ function is_valid_item_status($status)
   }
   return $is_valid;
 }
-
